@@ -1,0 +1,16 @@
+[project]
+name = "fdi-sbc-25jsp"
+version = "1.0.0"
+description = "A knowledge-based system for automotive reasoning"
+readme = "README.md"
+requires-python = ">=3.13"
+dependencies = [
+    "click>=8.4.1",
+    "loguru>=0.7.3",
+    "prompt-toolkit>=3.0.52",
+    "pyparsing>=3.3.2",
+    "rich>=15.0.0",
+]
+
+[project.scripts]
+sbc = "sbc.cli:main"

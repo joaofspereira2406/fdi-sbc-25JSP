@@ -1,0 +1,190 @@
+# =====================
+# TAREA 1: Diagnóstico de Averías
+# =====================
+
+# Síntomas observados (certeza de la observación)
+
+coche_A tiene_sintoma vibracion. [0.8]
+coche_A tiene_sintoma ruido_frenos. [0.9]
+coche_B tiene_sintoma humo_motor. [0.95]
+coche_B tiene_sintoma temperatura_alta. [1.0]
+coche_C tiene_sintoma perdida_potencia. [0.7]
+coche_C tiene_sintoma consumo_alto. [0.75]
+coche_D tiene_sintoma ruido_frenos. [0.85]
+coche_D tiene_sintoma temperatura_alta. [0.9]
+coche_E tiene_sintoma vibracion. [0.8]
+coche_E tiene_sintoma perdida_potencia. [0.78]
+coche_F tiene_sintoma consumo_alto. [0.82]
+coche_F tiene_sintoma humo_motor. [0.88]
+
+# Relaciones síntoma → fallo (hechos)
+
+vibracion indica fallo_rueda. [0.85]
+vibracion indica desalineacion_ruedas. [0.6]
+vibracion indica neumatico_desgastado. [0.7]
+ruido_frenos indica pastillas_gastadas. [0.95]
+ruido_frenos indica disco_frenado_dañado. [0.8]
+ruido_frenos indica liquido_frenos_bajo. [0.65]
+humo_motor indica fuga_aceite. [0.9]
+humo_motor indica mezcla_rica_combustible. [0.7]
+humo_motor indica desgaste_motor. [0.6]
+temperatura_alta indica fallo_refrigeracion. [0.85]
+temperatura_alta indica bomba_agua_defectuosa. [0.8]
+temperatura_alta indica termostato_atascado. [0.75]
+perdida_potencia indica filtro_aire_sucio. [0.8]
+perdida_potencia indica turbo_defectuoso. [0.85]
+perdida_potencia indica sensor_oxigeno_fallando. [0.7]
+consumo_alto indica inyectores_sucios. [0.75]
+consumo_alto indica mezcla_rica_combustible. [0.7]
+consumo_alto indica sensor_masa_aire_defectuoso. [0.65]
+
+# Urgencias
+
+pastillas_gastadas tiene_urgencia critica.
+fuga_aceite tiene_urgencia critica.
+fallo_refrigeracion tiene_urgencia alta.
+fallo_rueda tiene_urgencia alta.
+filtro_aire_sucio tiene_urgencia media.
+inyectores_sucios tiene_urgencia media.
+turbo_defectuoso tiene_urgencia alta.
+desalineacion_ruedas tiene_urgencia media.
+neumatico_desgastado tiene_urgencia media.
+disco_frenado_dañado tiene_urgencia alta.
+liquido_frenos_bajo tiene_urgencia alta.
+mezcla_rica_combustible tiene_urgencia media.
+desgaste_motor tiene_urgencia alta.
+termostato_atascado tiene_urgencia alta.
+bomba_agua_defectuosa tiene_urgencia alta.
+sensor_oxigeno_fallando tiene_urgencia media.
+sensor_masa_aire_defectuoso tiene_urgencia media.
+
+# Reglas
+
+X tiene_fallo Y <- X tiene_sintoma Z, Z indica Y. [0.9]
+X tiene_fallo Y <- X tiene_sintoma Z1, X tiene_sintoma Z2, Z1 indica Y, Z2 indica Y. [0.85]
+X necesita_atencion_urgente critica <- X tiene_fallo Y, Y tiene_urgencia critica. [1.0]
+X es_fallo_probable Y <- X tiene_fallo Y, Y tiene_urgencia alta. [0.8]
+
+
+# =====================
+# TAREA 2: Clasificación de Vehículos
+# =====================
+
+# Marcas — hechos categóricos (en la gran mayoría de casos)
+
+mustang es_marca ford.
+camaro es_marca chevrolet.
+ram es_marca dodge.
+f150 es_marca ford.
+tesla es_marca tesla.
+supra es_marca toyota.
+supra_mk5 es_marca toyota. [0.7]
+supra_mk5 es_marca bmw. [0.3]
+rx7 es_marca mazda.
+beat es_marca honda.
+capuccino es_marca suzuki.
+prius es_marca toyota.
+m3 es_marca bmw.
+911 es_marca porsche.
+golf es_marca volkswagen.
+leon es_marca seat.
+
+# Origen — categórico salvo raras excepciones
+
+mustang es_origen americano.
+camaro es_origen americano.
+ram es_origen americano.
+f150 es_origen americano.
+tesla es_origen americano.
+supra es_origen jdm.
+supra_mk5 es_origen jdm. [0.7]
+supra_mk5 es_origen europeo. [0.3]
+rx7 es_origen jdm.
+beat es_origen jdm.
+capuccino es_origen jdm.
+prius es_origen jdm.
+m3 es_origen europeo.
+911 es_origen europeo.
+golf es_origen europeo.
+leon es_origen europeo.
+
+# Estilo — ligeramente subjetivo
+
+mustang es_estilo muscle. [0.95]
+camaro es_estilo muscle. [0.95]
+ram es_estilo pickup. [0.98]
+f150 es_estilo pickup. [0.98]
+tesla es_estilo familiar. [0.9]
+supra es_estilo sport. [0.95]
+supra_mk5 es_estilo sport. [0.95]
+rx7 es_estilo sport. [0.95]
+beat es_estilo kei. [0.98]
+capuccino es_estilo kei. [0.98]
+prius es_estilo familiar. [0.92]
+m3 es_estilo sport. [0.9]
+911 es_estilo sport. [0.98]
+golf es_estilo familiar. [0.95]
+leon es_estilo familiar. [0.95]
+
+# Reglas de clasificación — alta certeza si origen+estilo coinciden
+
+X es_categoria premium <- X es_tipo euro_sport. [0.9]
+X es_categoria premium <- X es_tipo muscle_car. [0.85]
+X es_categoria coleccion <- X es_tipo kei_car. [0.88]
+X es_categoria coleccion <- X es_tipo muscle_car. [0.85]
+X es_complementario_de Y <- X es_origen O, Y es_origen O, X es_tipo T1, Y es_tipo T2, X != Y. [0.85]
+X es_rival_de Y <- X es_origen O, Y es_origen O, X es_tipo T, Y es_tipo T, X != Y. [0.9]
+X es_alternativa_a Y <- X es_tipo T, Y es_tipo T, X es_marca M1, Y es_marca M2, X != Y. [0.9]
+X es_tipo muscle_car <- X es_origen americano, X es_estilo muscle. [0.98]
+X es_tipo pickup_truck <- X es_origen americano, X es_estilo pickup. [0.98]
+X es_tipo americano_familiar <- X es_origen americano, X es_estilo familiar. [0.95]
+X es_tipo jdm_sport <- X es_origen jdm, X es_estilo sport. [0.95]
+X es_tipo kei_car <- X es_origen jdm, X es_estilo kei. [0.98]
+X es_tipo japones_familiar <- X es_origen jdm, X es_estilo familiar. [0.95]
+X es_tipo euro_sport <- X es_origen europeo, X es_estilo sport. [0.95]
+X es_tipo europeo_familiar <- X es_origen europeo, X es_estilo familiar. [0.95]
+
+# =====================
+# TAREA 3: Gestión de Combustible y Eficiencia
+# =====================
+
+#Combustible por coche
+mustang usa_combustible gasolina.
+camaro usa_combustible gasolina.
+ram usa_combustible diesel.
+f150 usa_combustible diesel.
+supra usa_combustible gasolina.
+rx7 usa_combustible gasolina.
+beat usa_combustible gasolina.
+capuccino usa_combustible gasolina.
+m3 usa_combustible gasolina.
+911 usa_combustible gasolina.
+prius usa_combustible hibrido.
+tesla usa_combustible electrico.
+golf usa_combustible diesel.
+leon usa_combustible diesel.
+
+#Clasificación de combustible
+gasolina es_clase combustible_fosil.
+diesel es_clase combustible_fosil.
+hibrido es_clase combustible_mixto.
+electrico es_clase combustible_limpio.
+
+#Emisiones
+combustible_fosil tiene_emision alta. [0.85]
+combustible_mixto tiene_emision media. [0.9]
+combustible_limpio tiene_emision nula. [0.95]
+
+#REGLAS (UPDATED TO MATCH RENAMING)
+X es_categoria contaminante <- X tiene_emision alta. [0.8]
+X tiene_emision alta <- X usa_combustible C, C es_clase combustible_fosil. [0.85]
+X es_categoria ecologico <- X usa_combustible C, C es_clase combustible_limpio. [0.95]
+X es_eficiente_en ciudad <- X usa_combustible hibrido. [0.9]
+X es_eficiente_en ciudad <- X usa_combustible electrico. [0.95]
+X es_recomendado_para ciudad <- X usa_combustible electrico. [0.95]
+X es_recomendado_para ciudad <- X usa_combustible hibrido. [0.95]
+X es_eficiente_en ciudad <- X usa_combustible diesel. [0.5]
+X es_recomendado_para ciudad <- X usa_combustible diesel. [0.2]
+X es_eficiente_en autopista <- X usa_combustible diesel. [0.85]
+X es_recomendado_para viaje_largo <- X usa_combustible diesel. [0.85]
+X es_recomendado_para viaje_largo <- X usa_combustible hibrido. [0.7]
