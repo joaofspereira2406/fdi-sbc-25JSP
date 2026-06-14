@@ -19,23 +19,48 @@ SINTOMAS = {
 
 INDICADORES = {
     "vibracion": {"fallo_rueda", "desalineacion_ruedas", "neumatico_desgastado"},
-    "ruido_frenos": {"pastillas_gastadas", "disco_frenado_dañado", "liquido_frenos_bajo"},
+    "ruido_frenos": {
+        "pastillas_gastadas",
+        "disco_frenado_dañado",
+        "liquido_frenos_bajo",
+    },
     "humo_motor": {"fuga_aceite", "mezcla_rica_combustible", "desgaste_motor"},
-    "temperatura_alta": {"fallo_refrigeracion", "bomba_agua_defectuosa", "termostato_atascado"},
-    "perdida_potencia": {"filtro_aire_sucio", "turbo_defectuoso", "sensor_oxigeno_fallando"},
-    "consumo_alto": {"inyectores_sucios", "mezcla_rica_combustible", "sensor_masa_aire_defectuoso"}
+    "temperatura_alta": {
+        "fallo_refrigeracion",
+        "bomba_agua_defectuosa",
+        "termostato_atascado",
+    },
+    "perdida_potencia": {
+        "filtro_aire_sucio",
+        "turbo_defectuoso",
+        "sensor_oxigeno_fallando",
+    },
+    "consumo_alto": {
+        "inyectores_sucios",
+        "mezcla_rica_combustible",
+        "sensor_masa_aire_defectuoso",
+    },
 }
 
 URGENCIAS_CRITICA = {"pastillas_gastadas", "fuga_aceite"}
 URGENCIAS_ALTA = {
-    "fallo_refrigeracion", "fallo_rueda", "turbo_defectuoso",
-    "disco_frenado_dañado", "liquido_frenos_bajo",
-    "desgaste_motor", "termostato_atascado", "bomba_agua_defectuosa"
+    "fallo_refrigeracion",
+    "fallo_rueda",
+    "turbo_defectuoso",
+    "disco_frenado_dañado",
+    "liquido_frenos_bajo",
+    "desgaste_motor",
+    "termostato_atascado",
+    "bomba_agua_defectuosa",
 }
 URGENCIAS_MEDIA = {
-    "filtro_aire_sucio", "inyectores_sucios", "mezcla_rica_combustible",
-    "sensor_oxigeno_fallando", "sensor_masa_aire_defectuoso",
-    "neumatico_desgastado", "desalineacion_ruedas"
+    "filtro_aire_sucio",
+    "inyectores_sucios",
+    "mezcla_rica_combustible",
+    "sensor_oxigeno_fallando",
+    "sensor_masa_aire_defectuoso",
+    "neumatico_desgastado",
+    "desalineacion_ruedas",
 }
 
 URGENCIA_CRITICA_COCHES = {"coche_A", "coche_B", "coche_D", "coche_F"}
@@ -62,28 +87,50 @@ EURO_SPORT = {"m3", "911"}
 EUROPEO_FAMILIAR = {"golf", "leon"}
 
 MARCAS = {
-    "mustang": "ford", "camaro": "chevrolet", "ram": "dodge", "f150": "ford",
-    "tesla": "tesla", "supra": "toyota", "rx7": "mazda", "beat": "honda",
-    "capuccino": "suzuki", "prius": "toyota", "m3": "bmw", "911": "porsche",
-    "golf": "volkswagen", "leon": "seat",
+    "mustang": "ford",
+    "camaro": "chevrolet",
+    "ram": "dodge",
+    "f150": "ford",
+    "tesla": "tesla",
+    "supra": "toyota",
+    "rx7": "mazda",
+    "beat": "honda",
+    "capuccino": "suzuki",
+    "prius": "toyota",
+    "m3": "bmw",
+    "911": "porsche",
+    "golf": "volkswagen",
+    "leon": "seat",
 }
 
 RIVALES = {
-    "mustang": {"camaro"}, "camaro": {"mustang"},
-    "supra": {"rx7"}, "rx7": {"supra"},
-    "m3": {"911"}, "911": {"m3"},
-    "ram": {"f150"}, "f150": {"ram"},
-    "beat": {"capuccino"}, "capuccino": {"beat"},
-    "golf": {"leon"}, "leon": {"golf"},
+    "mustang": {"camaro"},
+    "camaro": {"mustang"},
+    "supra": {"rx7"},
+    "rx7": {"supra"},
+    "m3": {"911"},
+    "911": {"m3"},
+    "ram": {"f150"},
+    "f150": {"ram"},
+    "beat": {"capuccino"},
+    "capuccino": {"beat"},
+    "golf": {"leon"},
+    "leon": {"golf"},
 }
 
 ALTERNATIVAS = {
-    "mustang": {"camaro"}, "supra": {"rx7"}, "m3": {"911"},
-    "golf": {"leon"}, "ram": {"f150"}, "beat": {"capuccino"},
-    "prius": set(), "tesla": set(),
+    "mustang": {"camaro"},
+    "supra": {"rx7"},
+    "m3": {"911"},
+    "golf": {"leon"},
+    "ram": {"f150"},
+    "beat": {"capuccino"},
+    "prius": set(),
+    "tesla": set(),
 }
 
 # --- helpers ---
+
 
 def get_degree(kb, triple):
     for fact in kb.facts:
@@ -95,6 +142,7 @@ def get_degree(kb, triple):
 # =====================
 # Tarea 1
 # =====================
+
 
 class TestDiagnosticoHechos(unittest.TestCase):
     def test_sintomas_directos(self):
@@ -165,14 +213,18 @@ class TestDiagnosticoDerivados(unittest.TestCase):
         forward_chain(kb)
         for coche in URGENCIA_CRITICA_COCHES:
             with self.subTest(coche=coche):
-                self.assertIn(Triple(coche, "necesita_atencion_urgente", "critica"), kb.facts)
+                self.assertIn(
+                    Triple(coche, "necesita_atencion_urgente", "critica"), kb.facts
+                )
 
     def test_no_urgencia_critica_coches(self):
         kb = parse_kb(KB_PATH)
         forward_chain(kb)
         for coche in NO_URGENCIA_CRITICA_COCHES:
             with self.subTest(coche=coche):
-                self.assertNotIn(Triple(coche, "necesita_atencion_urgente", "critica"), kb.facts)
+                self.assertNotIn(
+                    Triple(coche, "necesita_atencion_urgente", "critica"), kb.facts
+                )
 
     def test_es_fallo_probable_alta_urgencia(self):
         kb = parse_kb(KB_PATH)
@@ -183,12 +235,15 @@ class TestDiagnosticoDerivados(unittest.TestCase):
                 for fallo in INDICADORES[sintoma]:
                     if fallo in URGENCIAS_ALTA:
                         with self.subTest(coche=coche, fallo=fallo):
-                            self.assertIn(Triple(coche, "es_fallo_probable", fallo), kb.facts)
+                            self.assertIn(
+                                Triple(coche, "es_fallo_probable", fallo), kb.facts
+                            )
 
 
 # =====================
 # Tarea 2
 # =====================
+
 
 class TestClasificacionHechos(unittest.TestCase):
     def test_marcas(self):
@@ -201,7 +256,9 @@ class TestClasificacionHechos(unittest.TestCase):
         kb = parse_kb(KB_PATH)
         for coche in AMERICANO:
             with self.subTest(coche=coche):
-                self.assertEqual(len(query(kb, Triple(coche, "es_origen", "americano"))), 1)
+                self.assertEqual(
+                    len(query(kb, Triple(coche, "es_origen", "americano"))), 1
+                )
 
     def test_origen_jdm(self):
         kb = parse_kb(KB_PATH)
@@ -213,7 +270,9 @@ class TestClasificacionHechos(unittest.TestCase):
         kb = parse_kb(KB_PATH)
         for coche in EUROPEO:
             with self.subTest(coche=coche):
-                self.assertEqual(len(query(kb, Triple(coche, "es_origen", "europeo"))), 1)
+                self.assertEqual(
+                    len(query(kb, Triple(coche, "es_origen", "europeo"))), 1
+                )
 
     def test_estilo_muscle(self):
         kb = parse_kb(KB_PATH)
@@ -247,7 +306,9 @@ class TestClasificacionHechos(unittest.TestCase):
         kb = parse_kb(KB_PATH)
         for coche in AMERICANO_FAMILIAR | JAPONES_FAMILIAR | EUROPEO_FAMILIAR:
             with self.subTest(coche=coche):
-                self.assertEqual(len(query(kb, Triple(coche, "es_estilo", "familiar"))), 1)
+                self.assertEqual(
+                    len(query(kb, Triple(coche, "es_estilo", "familiar"))), 1
+                )
 
 
 class TestClasificacionDerivados(unittest.TestCase):
@@ -302,10 +363,14 @@ class TestClasificacionDerivados(unittest.TestCase):
         kb = parse_kb(KB_PATH)
         forward_chain(kb)
         groups = {
-            "muscle_car": MUSCLE, "pickup_truck": PICKUP,
-            "americano_familiar": AMERICANO_FAMILIAR, "jdm_sport": JDM_SPORT,
-            "kei_car": KEI, "japones_familiar": JAPONES_FAMILIAR,
-            "euro_sport": EURO_SPORT, "europeo_familiar": EUROPEO_FAMILIAR,
+            "muscle_car": MUSCLE,
+            "pickup_truck": PICKUP,
+            "americano_familiar": AMERICANO_FAMILIAR,
+            "jdm_sport": JDM_SPORT,
+            "kei_car": KEI,
+            "japones_familiar": JAPONES_FAMILIAR,
+            "euro_sport": EURO_SPORT,
+            "europeo_familiar": EUROPEO_FAMILIAR,
         }
         all_types = set(groups.keys())
         for tipo, coches in groups.items():
@@ -319,30 +384,39 @@ class TestClasificacionDerivados(unittest.TestCase):
 # Tarea 3
 # =====================
 
+
 class TestCombustibleHechos(unittest.TestCase):
     def test_gasolina_coches(self):
         kb = parse_kb(KB_PATH)
         for coche in GASOLINA:
             with self.subTest(coche=coche):
-                self.assertEqual(len(query(kb, Triple(coche, "usa_combustible", "gasolina"))), 1)
+                self.assertEqual(
+                    len(query(kb, Triple(coche, "usa_combustible", "gasolina"))), 1
+                )
 
     def test_diesel_coches(self):
         kb = parse_kb(KB_PATH)
         for coche in DIESEL:
             with self.subTest(coche=coche):
-                self.assertEqual(len(query(kb, Triple(coche, "usa_combustible", "diesel"))), 1)
+                self.assertEqual(
+                    len(query(kb, Triple(coche, "usa_combustible", "diesel"))), 1
+                )
 
     def test_hibrido_coches(self):
         kb = parse_kb(KB_PATH)
         for coche in HIBRIDO:
             with self.subTest(coche=coche):
-                self.assertEqual(len(query(kb, Triple(coche, "usa_combustible", "hibrido"))), 1)
+                self.assertEqual(
+                    len(query(kb, Triple(coche, "usa_combustible", "hibrido"))), 1
+                )
 
     def test_electrico_coches(self):
         kb = parse_kb(KB_PATH)
         for coche in ELECTRICO:
             with self.subTest(coche=coche):
-                self.assertEqual(len(query(kb, Triple(coche, "usa_combustible", "electrico"))), 1)
+                self.assertEqual(
+                    len(query(kb, Triple(coche, "usa_combustible", "electrico"))), 1
+                )
 
     def test_tipos_combustible(self):
         kb = parse_kb(KB_PATH)
@@ -377,10 +451,7 @@ class TestCombustibleDerivados(unittest.TestCase):
 
         for coche in GASOLINA | DIESEL:
             with self.subTest(coche=coche):
-                self.assertIn(
-                    Triple(coche, "tiene_emision", "alta"),
-                    kb.facts
-                )
+                self.assertIn(Triple(coche, "tiene_emision", "alta"), kb.facts)
 
     def test_no_emision_alta_limpios(self):
         kb = parse_kb(KB_PATH)
@@ -388,10 +459,7 @@ class TestCombustibleDerivados(unittest.TestCase):
 
         for coche in ELECTRICO | HIBRIDO:
             with self.subTest(coche=coche):
-                self.assertNotIn(
-                    Triple(coche, "tiene_emision", "alta"),
-                    kb.facts
-                )
+                self.assertNotIn(Triple(coche, "tiene_emision", "alta"), kb.facts)
 
     def test_eficientes_ciudad(self):
         kb = parse_kb(KB_PATH)
@@ -399,10 +467,7 @@ class TestCombustibleDerivados(unittest.TestCase):
 
         for coche in ELECTRICO | HIBRIDO:
             with self.subTest(coche=coche):
-                self.assertIn(
-                    Triple(coche, "es_eficiente_en", "ciudad"),
-                    kb.facts
-                )
+                self.assertIn(Triple(coche, "es_eficiente_en", "ciudad"), kb.facts)
 
     def test_gasolina_no_eficiente_ciudad(self):
         kb = parse_kb(KB_PATH)
@@ -410,10 +475,7 @@ class TestCombustibleDerivados(unittest.TestCase):
 
         for coche in GASOLINA:
             with self.subTest(coche=coche):
-                self.assertNotIn(
-                    Triple(coche, "es_eficiente_en", "ciudad"),
-                    kb.facts
-                )
+                self.assertNotIn(Triple(coche, "es_eficiente_en", "ciudad"), kb.facts)
 
     def test_gasolina_no_eficiente_ciudad(self):
         kb = parse_kb(KB_PATH)
@@ -421,10 +483,7 @@ class TestCombustibleDerivados(unittest.TestCase):
 
         for coche in GASOLINA:
             with self.subTest(coche=coche):
-                self.assertNotIn(
-                    Triple(coche, "es_eficiente_en", "ciudad"),
-                    kb.facts
-                )
+                self.assertNotIn(Triple(coche, "es_eficiente_en", "ciudad"), kb.facts)
 
     def test_recomendado_viaje_largo(self):
         kb = parse_kb(KB_PATH)
@@ -433,8 +492,7 @@ class TestCombustibleDerivados(unittest.TestCase):
         for coche in DIESEL | HIBRIDO:
             with self.subTest(coche=coche):
                 self.assertIn(
-                    Triple(coche, "es_recomendado_para", "viaje_largo"),
-                    kb.facts
+                    Triple(coche, "es_recomendado_para", "viaje_largo"), kb.facts
                 )
 
     def test_recomendado_ciudad(self):
@@ -443,10 +501,7 @@ class TestCombustibleDerivados(unittest.TestCase):
 
         for coche in ELECTRICO | HIBRIDO:
             with self.subTest(coche=coche):
-                self.assertIn(
-                    Triple(coche, "es_recomendado_para", "ciudad"),
-                    kb.facts
-                )
+                self.assertIn(Triple(coche, "es_recomendado_para", "ciudad"), kb.facts)
 
 
 class TestRestriccionesDerivados(unittest.TestCase):
@@ -461,7 +516,16 @@ class TestRestriccionesDerivados(unittest.TestCase):
     def test_no_autorivales(self):
         kb = parse_kb(KB_PATH)
         forward_chain(kb)
-        todos = MUSCLE | PICKUP | AMERICANO_FAMILIAR | JDM_SPORT | KEI | JAPONES_FAMILIAR | EURO_SPORT | EUROPEO_FAMILIAR
+        todos = (
+            MUSCLE
+            | PICKUP
+            | AMERICANO_FAMILIAR
+            | JDM_SPORT
+            | KEI
+            | JAPONES_FAMILIAR
+            | EURO_SPORT
+            | EUROPEO_FAMILIAR
+        )
         for coche in todos:
             with self.subTest(coche=coche):
                 self.assertNotIn(Triple(coche, "es_rival_de", coche), kb.facts)
@@ -477,7 +541,16 @@ class TestRestriccionesDerivados(unittest.TestCase):
     def test_no_autoalternativas(self):
         kb = parse_kb(KB_PATH)
         forward_chain(kb)
-        todos = MUSCLE | PICKUP | AMERICANO_FAMILIAR | JDM_SPORT | KEI | JAPONES_FAMILIAR | EURO_SPORT | EUROPEO_FAMILIAR
+        todos = (
+            MUSCLE
+            | PICKUP
+            | AMERICANO_FAMILIAR
+            | JDM_SPORT
+            | KEI
+            | JAPONES_FAMILIAR
+            | EURO_SPORT
+            | EUROPEO_FAMILIAR
+        )
         for coche in todos:
             with self.subTest(coche=coche):
                 self.assertNotIn(Triple(coche, "es_alternativa_a", coche), kb.facts)

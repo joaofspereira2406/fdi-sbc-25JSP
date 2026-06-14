@@ -90,11 +90,16 @@ def match_body(
                         left_num = float(left_val)
                     except (ValueError, TypeError):
                         return
-                    if op == "<" and not (left_num < right): return
-                    if op == "<=" and not (left_num <= right): return
-                    if op == "=" and not (left_num == right): return
-                    if op == ">=" and not (left_num >= right): return
-                    if op == ">" and not (left_num > right): return
+                    if op == "<" and not (left_num < right):
+                        return
+                    if op == "<=" and not (left_num <= right):
+                        return
+                    if op == "=" and not (left_num == right):
+                        return
+                    if op == ">=" and not (left_num >= right):
+                        return
+                    if op == ">" and not (left_num > right):
+                        return
                 # != between two variables
                 else:
                     if bindings.get(left, left) == bindings.get(right, right):
