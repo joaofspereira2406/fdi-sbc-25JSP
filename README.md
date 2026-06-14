@@ -126,7 +126,7 @@ Fuel & Efficiency: usa_combustible, es_tipo (combustible), tiene_emision, es_efi
 uv run python -m unittest test.test_engine
 ````
 
-All 50 tests cover direct facts, forward-chained inferences, backward-chained reasoning, and negative cases across all three tasks.
+All 45 tests cover direct facts, forward-chained inferences, backward-chained reasoning, and negative cases across all three tasks.
 
 ### Author
 
